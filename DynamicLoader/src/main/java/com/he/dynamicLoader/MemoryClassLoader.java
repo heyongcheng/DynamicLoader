@@ -11,7 +11,7 @@ public class MemoryClassLoader extends URLClassLoader {
 
 	private byte[] classBytes;
 	
-    public MemoryClassLoader(String className,byte[] classBytes) {
+    public MemoryClassLoader(byte[] classBytes) {
         super(new URL[0], MemoryClassLoader.class.getClassLoader());
         this.classBytes = classBytes;
     }
