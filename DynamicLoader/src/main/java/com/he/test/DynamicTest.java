@@ -27,9 +27,9 @@ public class DynamicTest {
 			
 			System.out.println(classObject);
 			
-			MemoryClassLoader mLoader = new MemoryClassLoader(classObject.getBytes());
+			MemoryClassLoader mLoader = new MemoryClassLoader();
 			
-			Class<?> loadClass = mLoader.loadClass("TestClass");
+			Class<?> loadClass = mLoader.loadClass("TestClass",classObject.getBytes());
 			
 			Object newInstance = loadClass.newInstance();
 			

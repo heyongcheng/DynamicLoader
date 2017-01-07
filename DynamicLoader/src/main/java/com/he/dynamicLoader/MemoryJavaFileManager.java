@@ -1,6 +1,8 @@
 package com.he.dynamicLoader;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
@@ -15,6 +17,11 @@ public class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileMan
 		return javaClassObject;
 	}
 	
+	private Map<String,JavaClassObject> javaClassObjectMap = new ConcurrentHashMap<String,JavaClassObject>();
+	
+	public Map<String, JavaClassObject> getJavaClassObjectMap() {
+		return javaClassObjectMap;
+	}
 	public MemoryJavaFileManager(JavaFileManager fileManager) {
 		super(fileManager);
 	}
@@ -42,9 +49,8 @@ public class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileMan
                                                JavaFileObject.Kind kind,
                                                FileObject sibling) throws IOException {
         if (kind == JavaFileObject.Kind.CLASS) {
-            if(javaClassObject == null){
-            	javaClassObject = new JavaClassObject(className);
-            }
+            javaClassObject = new JavaClassObject(className);
+            javaClassObjectMap.put(className, javaClassObject);
             return javaClassObject;
         } else {
             return super.getJavaFileForOutput(location, className, kind, sibling);
