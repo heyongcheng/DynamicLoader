@@ -3,6 +3,7 @@ package com.he.dynamicLoader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class JavaClassObject extends SimpleJavaFileObject{
 	 * @param className
 	 */
 	protected JavaClassObject(String className) {
-		super(MemoryJavaFileManager.toURI(className), Kind.CLASS);
+		super(URI.create("string:///" + className.replace('.', '/') + Kind.CLASS.extension), Kind.CLASS);
 		this.names.add(className);
 	}
 

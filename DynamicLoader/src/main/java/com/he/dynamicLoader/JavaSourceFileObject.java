@@ -1,5 +1,6 @@
 package com.he.dynamicLoader;
 
+import java.net.URI;
 import java.nio.CharBuffer;
 
 import javax.tools.SimpleJavaFileObject;
@@ -12,8 +13,8 @@ public class JavaSourceFileObject extends SimpleJavaFileObject{
 
 	private String content;
 	
-	protected JavaSourceFileObject(String name,String code) {
-		super(MemoryJavaFileManager.toURI(name), Kind.SOURCE);
+	protected JavaSourceFileObject(String className,String code) {
+		super(URI.create("string:///" + className.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
 		this.content = code;
 	}
 	/**

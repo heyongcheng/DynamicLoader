@@ -2,25 +2,25 @@ package com.he.dynamicLoader;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * 
+ * @author Heyongcheng
+ *
+ */
 public class MemoryClassLoader extends URLClassLoader {
 
-    Map<String, byte[]> classBytes = new HashMap<String, byte[]>();
-
-    public MemoryClassLoader(Map<String, byte[]> classBytes) {
+	private byte[] classBytes;
+	
+    public MemoryClassLoader(String className,byte[] classBytes) {
         super(new URL[0], MemoryClassLoader.class.getClassLoader());
-        this.classBytes.putAll(classBytes);
+        this.classBytes = classBytes;
     }
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        byte[] buf = classBytes.get(name);
-        if (buf == null) {
+        if (classBytes == null) {
             return super.findClass(name);
         }
-        classBytes.remove(name);
-        return defineClass(name, buf, 0, buf.length);
+        return defineClass(name, classBytes, 0, classBytes.length);
     }
 }
