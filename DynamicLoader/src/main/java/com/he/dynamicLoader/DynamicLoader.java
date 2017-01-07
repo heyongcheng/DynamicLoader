@@ -1,5 +1,6 @@
 package com.he.dynamicLoader;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -7,43 +8,52 @@ import java.util.regex.Pattern;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 public class DynamicLoader {
 
-    /**
-     * auto fill in the java-name with code, return null if cannot find the public class
-     * @param javaSrc source code string
-     * @return return the Map, the KEY means ClassName, the VALUE means bytecode.
-     */
-    public static Map<String, byte[]> compile(String javaSrc) {
-        Pattern pattern = Pattern.compile("public\\s+class\\s+(\\w+)");
-
-        Matcher matcher = pattern.matcher(javaSrc);
+	private static final Pattern pattern = Pattern.compile("^\\s+public\\s+class\\s+(\\w+)");
+    
+	/**
+	 * compile java source
+	 * @param sourceCode
+	 * @return
+	 */
+    public static Map<String, byte[]> compile(String sourceCode) {
+    	
+        Matcher matcher = pattern.matcher(sourceCode);
 
         if (matcher.find())
-            return compile(matcher.group(1) + ".java", javaSrc);
+            return compile(matcher.group(1) + ".java", sourceCode);
+        
         return null;
     }
     
     /**
-     * @param javaName the name of your public class,eg: <code>TestClass.java</code>
-     * @param javaSrc source code string
-     * @return return the Map, the KEY means ClassName, the VALUE means bytecode.
+     * compile java source
+     * @param className
+     * @param sourceCode
+     * @return
      */
-    public static Map<String, byte[]> compile(String javaName, String javaSrc) {
+    public static Map<String, byte[]> compile(String className, String sourceCode) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        StandardJavaFileManager stdManager = compiler.getStandardFileManager(null, null, null);
-
+        MemoryJavaFileManager manager = null;
         try{
-        	MemoryJavaFileManager manager = new MemoryJavaFileManager(stdManager);
-            JavaFileObject javaFileObject = manager.makeStringSource(javaName, javaSrc);
+        	manager = new MemoryJavaFileManager(compiler.getStandardFileManager(null, null, null));
+            JavaFileObject javaFileObject = manager.makeStringSource(className, sourceCode);
             JavaCompiler.CompilationTask task = compiler.getTask(null, manager, null, null, null, Arrays.asList(javaFileObject));
             if (task.call())
                 return manager.getClassBytes();
         } catch (Exception e) {
             e.printStackTrace();
+        }finally{
+        	if(manager != null){
+        		try {
+					manager.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+        	}
         }
         return null;
     }
