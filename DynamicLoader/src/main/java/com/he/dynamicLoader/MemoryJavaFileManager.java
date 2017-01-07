@@ -78,18 +78,21 @@ public class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileMan
      * A file object that stores Java bytecode into the classBytes map.
      */
     private class ClassOutputBuffer extends SimpleJavaFileObject {
+    	
         private String name;
-
+        
         ClassOutputBuffer(String name) {
             super(toURI(name), Kind.CLASS);
             this.name = name;
         }
-
+        
+        @Override
         public OutputStream openOutputStream() {
             return new FilterOutputStream(new ByteArrayOutputStream()) {
+            	@Override
                 public void close() throws IOException {
-                    out.close();
-                    ByteArrayOutputStream bos = (ByteArrayOutputStream) out;
+                	super.close();
+					ByteArrayOutputStream bos = (ByteArrayOutputStream) out;
                     classBytes.put(name, bos.toByteArray());
                 }
             };
