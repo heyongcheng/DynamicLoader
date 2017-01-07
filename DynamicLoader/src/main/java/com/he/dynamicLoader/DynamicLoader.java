@@ -2,7 +2,6 @@ package com.he.dynamicLoader;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,17 +13,18 @@ public class DynamicLoader {
 
 	private static final Pattern pattern = Pattern.compile("^\\s+public\\s+class\\s+(\\w+)");
     
+	private static final String EXT = ".java";
 	/**
 	 * compile java source
 	 * @param sourceCode
 	 * @return
 	 */
-    public static Map<String, byte[]> compile(String sourceCode) {
+    public static JavaClassObject compile(String sourceCode) {
     	
         Matcher matcher = pattern.matcher(sourceCode);
 
         if (matcher.find())
-            return compile(matcher.group(1) + ".java", sourceCode);
+            return compile(matcher.group(1) + EXT, sourceCode);
         
         return null;
     }
@@ -35,7 +35,7 @@ public class DynamicLoader {
      * @param sourceCode
      * @return
      */
-    public static Map<String, byte[]> compile(String className, String sourceCode) {
+    public static JavaClassObject compile(String className, String sourceCode) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         MemoryJavaFileManager manager = null;
         try{
@@ -43,7 +43,7 @@ public class DynamicLoader {
             JavaFileObject javaFileObject = manager.makeStringSource(className, sourceCode);
             JavaCompiler.CompilationTask task = compiler.getTask(null, manager, null, null, null, Arrays.asList(javaFileObject));
             if (task.call())
-                return manager.getClassBytes();
+                return manager.getJavaClassObject();
         } catch (Exception e) {
             e.printStackTrace();
         }finally{
