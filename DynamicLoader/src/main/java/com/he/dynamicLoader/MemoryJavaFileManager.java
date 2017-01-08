@@ -1,8 +1,8 @@
 package com.he.dynamicLoader;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
@@ -17,7 +17,7 @@ public class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileMan
 		return javaClassObject;
 	}
 	
-	private Map<String,JavaClassObject> javaClassObjectMap = new ConcurrentHashMap<String,JavaClassObject>();
+	private Map<String,JavaClassObject> javaClassObjectMap = new LinkedHashMap<String,JavaClassObject>();
 	
 	public Map<String, JavaClassObject> getJavaClassObjectMap() {
 		return javaClassObjectMap;

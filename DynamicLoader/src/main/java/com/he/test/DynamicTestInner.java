@@ -50,26 +50,25 @@ public class DynamicTestInner {
 			
 			Map<String, JavaClassObject> compiles = DynamicLoader.compiles(new String[]{"DynamicLoader.Key","DynamicLoader.KeyImpl"},new String[]{sb.toString(),sb2.toString()});
 			
-			/*Set<Entry<String, JavaClassObject>> entrySet = compiles.entrySet();
+			Set<Entry<String, JavaClassObject>> entrySet = compiles.entrySet();
 			Iterator<Entry<String, JavaClassObject>> iterator = entrySet.iterator();
 			Class<?> loadClass = null;
 			while(iterator.hasNext()){
 				Entry<String, JavaClassObject> next = iterator.next();
 				Class<?> loadClass1 = mLoader.loadClass(next.getKey(),next.getValue().getBytes());
-				if(next.getKey().equals("KeyImpl")){
+				if(next.getKey().equals("DynamicLoader.KeyImpl")){
 					loadClass = loadClass1;
 				}
-			}*/
+			}
 			
-			Class<?> loadClass1 = mLoader.loadClass("DynamicLoader.Key",compiles.get("DynamicLoader.Key").getBytes());
+			/*Class<?> loadClass1 = mLoader.loadClass("DynamicLoader.Key",compiles.get("DynamicLoader.Key").getBytes());
 			Class<?> loadClass2 = mLoader.loadClass("DynamicLoader.KeyImpl",compiles.get("DynamicLoader.KeyImpl").getBytes());
-			Class<?> loadClass3 = mLoader.loadClass("DynamicLoader.KeyImpl$1",compiles.get("DynamicLoader.KeyImpl$1").getBytes());
-			Object newInstance = loadClass2.newInstance();
+			Class<?> loadClass3 = mLoader.loadClass("DynamicLoader.KeyImpl$1",compiles.get("DynamicLoader.KeyImpl$1").getBytes());*/
+			Object newInstance = loadClass.newInstance();
 			
-			Method method = loadClass2.getMethod("call2");
+			Method method = loadClass.getMethod("call2");
 			
 			method.invoke(newInstance);
-			
 			
 		} catch (Exception e) {
 			e.printStackTrace();

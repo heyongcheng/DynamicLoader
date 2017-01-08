@@ -1,16 +1,14 @@
 package com.he.dynamicLoader;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 /**
  * 
  * @author Heyongcheng
  *
  */
-public class MemoryClassLoader extends URLClassLoader {
+public class MemoryClassLoader extends ClassLoader {
 	
     public MemoryClassLoader() {
-        super(new URL[0], MemoryClassLoader.class.getClassLoader());
+        super(MemoryClassLoader.class.getClassLoader());
     }
     
     public Class<?> loadClass(String name,byte[] classBytes) throws ClassNotFoundException {
