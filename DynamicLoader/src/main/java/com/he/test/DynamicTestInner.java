@@ -17,7 +17,7 @@ public class DynamicTestInner {
 	public static void main(String[] args) {
 
 		try {
-			FileReader fr = new FileReader(new File("F:\\sumpay-risk-processor\\src\\main\\java\\DynamicLoader\\Key.java"));
+			FileReader fr = new FileReader(new File("F:\\sumpay-risk-processor\\src\\main\\java\\DynamicLoader\\Keys.java"));
 			
 			BufferedReader br = new BufferedReader(fr);
 			
@@ -48,7 +48,7 @@ public class DynamicTestInner {
 			}
 			
 			
-			Map<String, JavaClassObject> compiles = DynamicLoader.compiles(new String[]{"DynamicLoader.Key","DynamicLoader.KeyImpl"},new String[]{sb.toString(),sb2.toString()});
+			Map<String, JavaClassObject> compiles = DynamicLoader.compiles(new String[]{"DynamicLoader.Keys","DynamicLoader.KeyImpl"},new String[]{sb.toString(),sb2.toString()});
 			
 			Set<Entry<String, JavaClassObject>> entrySet = compiles.entrySet();
 			Iterator<Entry<String, JavaClassObject>> iterator = entrySet.iterator();
